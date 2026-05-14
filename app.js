@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Definimos un promedio nacional aproximado basado en el IPC base 2023
     // (Estos valores son representativos para mostrar el contraste)
     const promedioNacional = [
-        100, 100.6, 101.1, 101.5, 101.8, 101.9, 102.2, 102.5, 102.8, 103.1, 103.3, 103.5,
-        103.8, 104.1, 104.4, 104.6, 104.8, 105.0, 105.2, 105.4, 105.6, 105.8, 106.0
+        100, 101.1, 102.5, 103.0, 103.2, 103.3, 103.5, 103.8, 104.2, 105.4, 105.8, 106.1,
+        106.3, 106.6, 107.0, 107.2, 107.5, 108.8, 109.1, 109.3, 109.5, 109.8, 110.2
     ];
 
     // 1. EL CALCULADOR DE PODER ADQUISITIVO (Lo que no se ve a simple vista)
@@ -85,12 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Creamos el trazo para el Promedio Nacional (Referencia)
     const tracePromedio = {
         x: meses,
-        y: promedioNacional.slice(0, meses.length), // Ajustamos al largo de tus datos
-        mode: 'lines',
+        y: promedioNacional.slice(0, meses.length),
+        mode: 'lines+markers',
         name: 'IPC General (Referencia)',
-        yaxis: 'y2', // CRÍTICO: Usamos un eje secundario para que sea visible como referencia
-        line: { color: 'rgba(148, 163, 184, 0.4)', width: 4, dash: 'dot' }, // Gris claro, punteado y más grueso
-        hoverinfo: 'skip'
+        yaxis: 'y2',
+        line: { color: 'rgba(148, 163, 184, 0.4)', width: 3, dash: 'dot' },
+        marker: { 
+            size: 4,
+            color: promedioNacional.map((p, i) => {
+                if (i === 0) return 'rgba(148, 163, 184, 0.4)';
+                const salto = (p - promedioNacional[i-1]) / promedioNacional[i-1];
+                return salto > 0.01 ? '#6366f1' : 'rgba(148, 163, 184, 0.4)'; // Azul pizarra para saltos > 1%
+            })
+        },
+        hovertemplate: '<b>%{x}</b><br>Índice IPC: <b>%{y:.1f}</b><br><span style="color:#6366f1">Referencia Nacional</span><extra></extra>'
     };
 
     const data = [tracePan, traceAceite, traceArroz, tracePromedio];
@@ -159,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // 2. FUNCIÓN DE SONIFICACIÓN REUTILIZABLE
-    const playProduct = async (dataArray, label, color) => {
+    const playProduct = async (dataArray, label, color, threshold = 0.05) => {
         if (isPlaying) return;
         await Tone.start();
         isPlaying = true;
@@ -184,9 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mapeo de Tono (Pitch)
             const freq = mapPriceToFrequency(val, minVal, maxVal, 220, 880);
             
-            // Alerta emocional si hay alza brusca (>5%)
+            // Alerta emocional si el alza supera el umbral (threshold)
             let esAlerta = false;
-            if (index > 0 && (val - dataArray[index-1])/dataArray[index-1] > 0.05) {
+            if (index > 0 && (val - dataArray[index-1])/dataArray[index-1] > threshold) {
                 esAlerta = true;
                 alert.triggerAttackRelease("C2", "4n", timeOffset);
             }
@@ -196,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Tone.Draw.schedule(() => {
                 statusText.style.color = esAlerta ? color : "#f8fafc";
                 statusText.style.fontWeight = esAlerta ? "bold" : "normal";
-                statusText.innerText = `Escuchando ${label}: ${meses[index]} | $${val.toFixed(0)}`;
+                statusText.innerText = `Escuchando ${label}: ${meses[index]} | ${label === 'IPC' ? val.toFixed(1) : '$' + val.toFixed(0)}`;
             }, timeOffset);
 
             timeOffset += 0.4;
@@ -210,8 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Listeners de los botones
-    document.getElementById('play-aceite').onclick = () => playProduct(aceitePrecios, "Aceite", "#f43f5e");
-    document.getElementById('play-pan').onclick = () => playProduct(panPrecios, "Pan", "#fbbf24");
-    document.getElementById('play-arroz').onclick = () => playProduct(arrozPrecios, "Arroz", "#38bdf8");
-    document.getElementById('play-ipc').onclick = () => playProduct(promedioNacional.slice(0, meses.length), "IPC", "#94a3b8");
+    document.getElementById('play-aceite').onclick = () => playProduct(aceitePrecios, "Aceite", "#f43f5e", 0.05);
+    document.getElementById('play-pan').onclick = () => playProduct(panPrecios, "Pan", "#fbbf24", 0.05);
+    document.getElementById('play-arroz').onclick = () => playProduct(arrozPrecios, "Arroz", "#38bdf8", 0.05);
+    document.getElementById('play-ipc').onclick = () => playProduct(promedioNacional.slice(0, meses.length), "IPC", "#6366f1", 0.01);
 });
