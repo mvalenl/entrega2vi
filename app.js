@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    `Precio: $${pt}<br>` +
                    `Con $5.000 comprabas: ${qty0}L/kg<br>` +
                    `Hoy compras: ${qtyt}L/kg<br>` +
-                   `<span style="color:red">Has perdido el ${Math.abs(loss)}% de tu comida</span><extra></extra>`;
+                   `<span style="color:#ff6b6b; font-weight:bold;">Has perdido el ${Math.abs(loss)}% de tu comida</span><extra></extra>`;
         });
     };
 
@@ -183,15 +183,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const coin = new Tone.MetalSynth({
             envelope: { attack: 0.01, decay: 0.1, release: 0.1 },
             harmonicity: 5.1,
-            resonance: 4000
-        }).toDestination();
-
         const alert = new Tone.MembraneSynth().toDestination();
 
         dataArray.forEach((val, index) => {
-            // Mapeo de Tono (Pitch)
+            // Mapeo de Tono (Pitch) - Único canal para representar valor
             const freq = mapPriceToFrequency(val, minVal, maxVal, 220, 880);
             
+            // Sonido de Moneda (Metálico) - Volumen constante para rigor técnico
+            const coin = new Tone.MetalSynth({
+                envelope: { attack: 0.01, decay: 0.1, release: 0.1 },
+                harmonicity: 5.1,
+                resonance: 4000
+            }).toDestination();
+
             // Alerta emocional si el alza supera el umbral (threshold)
             let esAlerta = false;
             if (index > 0 && (val - dataArray[index-1])/dataArray[index-1] > threshold) {
