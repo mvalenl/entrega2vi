@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `Precio: $${pt}<br>` +
                 `Con $5.000 comprabas: ${qty0}L/kg<br>` +
                 `Hoy compras: ${qtyt}L/kg<br>` +
-                `<span style="color:red">Has perdido el ${Math.abs(loss)}% de tu comida</span><extra></extra>`;
+                `<span style="color:yellow">Has perdido el ${Math.abs(loss)}% de tu comida</span><extra></extra>`;
         });
     };
 
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return salto > 0.01 ? '#6366f1' : 'rgba(148, 163, 184, 0.4)'; // Azul pizarra para saltos > 1%
             })
         },
-        hovertemplate: '<b>%{x}</b><br>Índice IPC: <b>%{y:.1f}</b><br><span style="color:#6366f1">Referencia Nacional</span><extra></extra>'
+        hovertemplate: '<b>%{x}</b><br>Índice IPC: <b>%{y:.1f}</b><br><span style="color:red">Referencia Nacional</span><extra></extra>'
     };
 
     const data = [tracePan, traceAceite, traceArroz, tracePromedio];
