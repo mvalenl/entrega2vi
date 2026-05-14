@@ -49,14 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
         marker: { size: 8 }
     };
 
-    // 2. Creamos el trazo para el Promedio Nacional
+    // 2. Creamos el trazo para el Promedio Nacional (Referencia)
     const tracePromedio = {
         x: meses,
         y: promedioNacional.slice(0, meses.length), // Ajustamos al largo de tus datos
         mode: 'lines',
-        name: 'IPC General (Promedio)',
-        line: { color: '#94a3b8', width: 2, dash: 'dot' }, // Gris sutil y punteado
-        hoverinfo: 'skip' // Para que no distraiga en el hover
+        name: 'IPC General (Referencia)',
+        yaxis: 'y2', // CRÍTICO: Usamos un eje secundario para que sea visible como referencia
+        line: { color: 'rgba(148, 163, 184, 0.4)', width: 4, dash: 'dot' }, // Gris claro, punteado y más grueso
+        hoverinfo: 'skip'
     };
 
     const data = [tracePan, traceAceite, traceArroz, tracePromedio];
@@ -82,9 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
         yaxis: {
             title: 'Precio Promedio ($)',
             gridcolor: 'rgba(255,255,255,0.1)',
-            tickfont: { color: '#94a3b8' },
+            tickfont: { color: '#f8fafc' },
             zeroline: false,
-            rangemode: 'tozero' // CRÍTICO: Asegura que el eje Y parta en 0
+            rangemode: 'tozero'
+        },
+        yaxis2: {
+            title: 'Índice IPC (Referencia)',
+            overlaying: 'y',
+            side: 'right',
+            showgrid: false,
+            zeroline: false,
+            tickfont: { color: 'rgba(148, 163, 184, 0.6)' },
+            range: [100, 110] // Ajustamos el rango del índice para que la pendiente sea comparable
         },
         margin: { l: 60, r: 20, t: 80, b: 50 },
         hovermode: 'closest'
