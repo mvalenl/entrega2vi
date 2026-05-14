@@ -1,0 +1,147 @@
+﻿Orden;Glosa;Descripción
+1;FUENTE;Corresponde al establecimiento donde se va a buscar los precios
+2;DIVISION;Código de división de canasta IPC
+3;GRUPO;Código de grupo de canasta IPC
+4;CLASE;Código de clase de canasta IPC
+5;SUBCLASE;Código de subclase de canasta IPC
+6;PRODUCTO;Código de producto de canasta IPC
+7;VARIEDAD;Código de variedad de canasta IPC
+8;Glosa_Producto;Descripción de producto del IPC
+9;pm_Enero2024;Precio promedio Enero 2024
+10;pm_Febrero2024;Precio promedio Febrero 2024
+11;pm_Marzo2024;Precio promedio Marzo 2024
+12;pm_Abril2024;Precio promedio Abril 2024
+13;pm_Mayo2024;Precio promedio Mayo 2024
+14;pm_Junio2024;Precio promedio Junio 2024
+15;pm_Julio2024;Precio promedio Julio 2024
+16;pm_Agosto2024;Precio promedio Agosto 2024
+17;pm_Septiembre2024;Precio promedio Septiembre 2024
+18;pm_Octubre2024;Precio promedio Octubre 2024
+19;pm_Noviembre2024;Precio promedio Noviembre 2024
+20;pm_Diciembre2024;Precio promedio Diciembre 2024
+21;pm_Enero2025;Precio promedio Enero 2025
+22;pm_Febrero2025;Precio promedio Febrero 2025
+23;pm_Marzo2024;Precio promedio Marzo 2025
+24;pm_Abril2025;Precio promedio Abril 2025
+25;pm_Mayo2025;Precio promedio Mayo 2025
+26;pm_Junio2025;Precio promedio Junio 2025
+27;pm_Julio2025;Precio promedio Julio 2025
+28;pm_Agosto2025;Precio promedio Agosto 2025
+29;pm_Septiembre2025;Precio promedio Septiembre 2025
+30;pm_Octubre2025;Precio promedio Octubre 2025
+31;pm_Noviembre2025;Precio promedio Noviembre 2025
+32;pm_16_Enero2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+33;pm_16_Febrero2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+34;pm_16_Marzo2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+35;pm_16_Abril2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+36;pm_16_Mayo2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+37;pm_16_Junio2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+38;pm_16_Julio2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+39;pm_16_Agosto2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+40;pm_16_Septiembre2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+41;pm_16_Octubre2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+42;pm_16_Noviembre2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+43;pm_16_Diciembre2024;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+44;pm_16_Enero2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+45;pm_16_Febrero2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+46;pm_16_Marzo2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+47;pm_16_Abril2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+48;pm_16_Mayo2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+49;pm_16_Junio2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+50;pm_16_Julio2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+51;pm_16_Agosto2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+52;pm_16_Septiembre2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+53;pm_16_Octubre2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+54;pm_16_Noviembre2025;Corresponde a precio de reemplazo no comparable, que se guarda para comparar con el mes siguiente
+55;Reemplaza_Enero2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+56;Reemplaza_Febrero2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+57;Reemplaza_Marzo2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+58;Reemplaza_Abril2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+59;Reemplaza_Mayo2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+60;Reemplaza_Junio2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+61;Reemplaza_Julio2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+62;Reemplaza_Agosto2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+63;Reemplaza_Septiembre2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+64;Reemplaza_Octubre2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+65;Reemplaza_Noviembre2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+66;Reemplaza_Diciembre2024;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+67;Reemplaza_Enero2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+68;Reemplaza_Febrero2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+69;Reemplaza_Marzo2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+70;Reemplaza_Abril2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+71;Reemplaza_Mayo2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+72;Reemplaza_Junio2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+73;Reemplaza_Julio2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+74;Reemplaza_Agosto2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+75;Reemplaza_Septiembre2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+76;Reemplaza_Octubre2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+77;Reemplaza_Noviembre2025;"Señala si el reemplazo es aceptado o no, ""SI"" aceptado, ""NO"" rechazado"
+78;Estado_lev_Enero2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+79;Estado_lev_Febrero2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+80;Estado_lev_Marzo2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+81;Estado_lev_Abril2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+82;Estado_lev_Mayo2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+83;Estado_lev_Junio2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+84;Estado_lev_Julio2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+85;Estado_lev_Agosto2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+86;Estado_lev_Septiembre2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+87;Estado_lev_Octubre2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+88;Estado_lev_Noviembre2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+89;Estado_lev_Diciembre2024;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+90;Estado_lev_Enero2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+91;Estado_lev_Febrero2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+92;Estado_lev_Marzo2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+93;Estado_lev_Abril2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+94;Estado_lev_Mayo2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+95;Estado_lev_Junio2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+96;Estado_lev_Julio2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+97;Estado_lev_Agosto2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+98;Estado_lev_Septiembre2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+99;Estado_lev_Octubre2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+100;Estado_lev_Noviembre2025;"Señala si se levanto en el mes, Código ""1""  se levanto, Código ""0"" no se levanto"
+101;Cantidad_Ene2024;Es la cantidad relacionado a la unidad de medida
+102;Cantidad_Feb2024;Es la cantidad relacionado a la unidad de medida
+103;Cantidad_Mar2024;Es la cantidad relacionado a la unidad de medida
+104;Cantidad_Abr2024;Es la cantidad relacionado a la unidad de medida
+105;Cantidad_May2024;Es la cantidad relacionado a la unidad de medida
+106;Cantidad_Jun2024;Es la cantidad relacionado a la unidad de medida
+107;Cantidad_Jul2024;Es la cantidad relacionado a la unidad de medida
+108;Cantidad_Ago2024;Es la cantidad relacionado a la unidad de medida
+109;Cantidad_Sep2024;Es la cantidad relacionado a la unidad de medida
+110;Cantidad_Oct2024;Es la cantidad relacionado a la unidad de medida
+111;Cantidad_Nov2024;Es la cantidad relacionado a la unidad de medida
+112;Cantidad_Dic2024;Es la cantidad relacionado a la unidad de medida
+113;Cantidad_Ene2025;Es la cantidad relacionado a la unidad de medida
+114;Cantidad_Feb2025;Es la cantidad relacionado a la unidad de medida
+115;Cantidad_Mar2025;Es la cantidad relacionado a la unidad de medida
+116;Cantidad_Abr2025;Es la cantidad relacionado a la unidad de medida
+117;Cantidad_May2025;Es la cantidad relacionado a la unidad de medida
+118;Cantidad_Jun2025;Es la cantidad relacionado a la unidad de medida
+119;Cantidad_Jul2025;Es la cantidad relacionado a la unidad de medida
+120;Cantidad_Ago2025;Es la cantidad relacionado a la unidad de medida
+121;Cantidad_Sep2025;Es la cantidad relacionado a la unidad de medida
+122;Cantidad_Oct2025;Es la cantidad relacionado a la unidad de medida
+123;Cantidad_Nov2025;Es la cantidad relacionado a la unidad de medida
+124;Unidad_Ene2024;Es la unidad de medida, relacionada a la cantidad
+125;Unidad_Feb2024;Es la unidad de medida, relacionada a la cantidad
+126;Unidad_Mar2024;Es la unidad de medida, relacionada a la cantidad
+127;Unidad_Abr2024;Es la unidad de medida, relacionada a la cantidad
+128;Unidad_May2024;Es la unidad de medida, relacionada a la cantidad
+129;Unidad_Jun2024;Es la unidad de medida, relacionada a la cantidad
+130;Unidad_Jul2024;Es la unidad de medida, relacionada a la cantidad
+131;Unidad_Ago2024;Es la unidad de medida, relacionada a la cantidad
+132;Unidad_Sep2024;Es la unidad de medida, relacionada a la cantidad
+133;Unidad_Oct2024;Es la unidad de medida, relacionada a la cantidad
+134;Unidad_Nov2024;Es la unidad de medida, relacionada a la cantidad
+135;Unidad_Dic2024;Es la unidad de medida, relacionada a la cantidad
+136;Unidad_Ene2025;Es la unidad de medida, relacionada a la cantidad
+137;Unidad_Feb2025;Es la unidad de medida, relacionada a la cantidad
+138;Unidad_Mar2025;Es la unidad de medida, relacionada a la cantidad
+139;Unidad_Abr2025;Es la unidad de medida, relacionada a la cantidad
+140;Unidad_May2025;Es la unidad de medida, relacionada a la cantidad
+141;Unidad_Jun2025;Es la unidad de medida, relacionada a la cantidad
+142;Unidad_Jul2025;Es la unidad de medida, relacionada a la cantidad
+143;Unidad_Ago2025;Es la unidad de medida, relacionada a la cantidad
+144;Unidad_Sep2025;Es la unidad de medida, relacionada a la cantidad
+145;Unidad_Oct2025;Es la unidad de medida, relacionada a la cantidad
+146;Unidad_Nov2025;Es la unidad de medida, relacionada a la cantidad

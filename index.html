@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolución IPC 2024: Pan, Aceite y Arroz</title>
+    <meta name="description" content="Visualización interactiva y sonificación del impacto de la inflación en productos básicos durante 2024.">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="index.css">
+    
+    <!-- Bibliotecas de terceros -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Encabezado -->
+        <header class="header">
+            <h1>Inflación Básica 2024</h1>
+            <p>Mientras el IPC general sube moderadamente, los productos básicos como el pan y el aceite han tenido alzas drásticas en meses específicos, afectando desproporcionadamente el presupuesto familiar.</p>
+        </header>
+
+        <!-- Panel Principal -->
+        <main class="glass-panel">
+            
+            <!-- Contenedor del Gráfico -->
+            <div id="plotly-chart" style="width: 100%; height: 500px;"></div>
+            
+            <!-- Controles Interactivos -->
+            <div class="controls">
+                <button id="play-sonification" class="play-btn">
+                    <!-- Icono de Play en SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    Escuchar Evolución del Aceite
+                </button>
+            </div>
+
+            <!-- Texto de Estado de Tone.js -->
+            <div id="status-text" class="status">Haz clic en el botón para escuchar cómo evolucionó el precio.</div>
+
+        </main>
+    </div>
+
+    <!-- Cargar los datos extraídos -->
+    <script src="datos_extraidos.js"></script>
+    
+    <!-- Lógica de la aplicación -->
+    <script src="app.js"></script>
+</body>
+</html>
