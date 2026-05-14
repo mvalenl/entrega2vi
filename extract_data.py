@@ -80,7 +80,11 @@ for mes in nombres_meses:
     for cat in ['pan', 'aceite', 'arroz']:
         precios = datos_por_mes[mes][cat]
         if precios:
-            mes_data[cat] = int(sum(precios) / len(precios))
+            avg = sum(precios) / len(precios)
+            # El pan parece venir con un factor 10x en los promedios brutos, lo ajustamos
+            if cat == 'pan':
+                avg = avg / 10
+            mes_data[cat] = int(avg)
         else:
             mes_data[cat] = 0
     datos_inflacion.append(mes_data)

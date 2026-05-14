@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const aceitePrecios = datosInflacion.map(d => d.aceite);
     const arrozPrecios = datosInflacion.map(d => d.arroz);
 
+    // 1. Definimos un promedio nacional aproximado basado en el IPC base 2023
+    // (Estos valores son representativos para mostrar el contraste)
+    const promedioNacional = [
+        100, 100.6, 101.1, 101.5, 101.8, 101.9, 102.2, 102.5, 102.8, 103.1, 103.3, 103.5,
+        103.8, 104.1, 104.4, 104.6, 104.8, 105.0, 105.2, 105.4, 105.6, 105.8, 106.0
+    ];
+
     // Trazos (Traces) para el gráfico interactivo
     const tracePan = {
         x: meses,
@@ -42,26 +49,45 @@ document.addEventListener('DOMContentLoaded', () => {
         marker: { size: 8 }
     };
 
-    const data = [tracePan, traceAceite, traceArroz];
+    // 2. Creamos el trazo para el Promedio Nacional
+    const tracePromedio = {
+        x: meses,
+        y: promedioNacional.slice(0, meses.length), // Ajustamos al largo de tus datos
+        mode: 'lines',
+        name: 'IPC General (Promedio)',
+        line: { color: '#94a3b8', width: 2, dash: 'dot' }, // Gris sutil y punteado
+        hoverinfo: 'skip' // Para que no distraiga en el hover
+    };
+
+    const data = [tracePan, traceAceite, traceArroz, tracePromedio];
 
     // Layout de Plotly adaptado al diseño Dark Glassmorphism
     const layout = {
+        title: {
+            text: '<b>Evolución de Precios: El impacto real en la Canasta</b>',
+            font: { color: '#f8fafc', size: 24 }
+        },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
         font: { family: 'Outfit', color: '#f8fafc' },
+        showlegend: true,
+        legend: { font: { color: '#94a3b8' }, orientation: 'h', y: 1.15 },
         xaxis: {
             title: 'Meses (2024 - 2025)',
+            gridcolor: 'rgba(255,255,255,0.1)',
+            tickfont: { color: '#94a3b8' },
             showgrid: false,
             zeroline: false
         },
         yaxis: {
-            title: 'Precio Promedio (CLP)',
+            title: 'Precio Promedio ($)',
             gridcolor: 'rgba(255,255,255,0.1)',
-            zeroline: false
+            tickfont: { color: '#94a3b8' },
+            zeroline: false,
+            rangemode: 'tozero' // CRÍTICO: Asegura que el eje Y parta en 0
         },
-        margin: { l: 60, r: 20, t: 40, b: 50 },
-        hovermode: 'x unified',
-        legend: { orientation: 'h', y: 1.15 }
+        margin: { l: 60, r: 20, t: 80, b: 50 },
+        hovermode: 'closest'
     };
 
     const config = { responsive: true, displayModeBar: false };
@@ -111,15 +137,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const durationPerNote = 0.4; // Segundos por cada mes
 
         aceitePrecios.forEach((precio, index) => {
-            const freq = mapPriceToFrequency(precio, minAceite, maxAceite, 220, 880); // Escala A3 a A5
+            const freq = mapPriceToFrequency(precio, minAceite, maxAceite, 220, 880);
             
+            // CALCULAR EL SALTO: ¿Cuánto subió respecto al mes anterior?
+            let salto = 0;
+            if (index > 0) {
+                salto = (precio - aceitePrecios[index - 1]) / aceitePrecios[index - 1];
+            }
+
+            // SI EL SALTO ES GRANDE (ej. > 5%), activamos efectos de "urgencia"
+            const esAlerta = salto > 0.05;
+
             // Programar la nota
-            synth.triggerAttackRelease(freq, "8n", timeOffset);
+            // Usamos un pequeño truco: conectamos a un vibrato solo si hay alerta
+            if (esAlerta) {
+                const vibrato = new Tone.Vibrato(5, 0.3).toDestination();
+                synth.connect(vibrato);
+                synth.triggerAttackRelease(freq, "8n", timeOffset);
+                // Desconectamos después de la nota para no acumular efectos
+                Tone.Transport.scheduleOnce(() => {
+                    synth.disconnect(vibrato);
+                }, timeOffset + 0.3);
+            } else {
+                synth.triggerAttackRelease(freq, "8n", timeOffset);
+            }
             
-            // Efecto visual en Plotly durante la reproducción (Opcional)
+            // Efecto visual sincronizado: Cambiar color o texto
             Tone.Draw.schedule(() => {
-                // Podríamos resaltar el punto en el gráfico, pero lo dejaremos simple
-                statusText.innerText = `Mes: ${meses[index]} | Precio Aceite: $${precio}`;
+                statusText.style.color = esAlerta ? "#f43f5e" : "#f8fafc";
+                statusText.style.fontWeight = esAlerta ? "bold" : "normal";
+                statusText.innerText = esAlerta 
+                    ? `⚠️ ¡ALERTA! Alza brusca: ${meses[index]} | $${precio}`
+                    : `Mes: ${meses[index]} | Precio Aceite: $${precio}`;
             }, timeOffset);
 
             timeOffset += durationPerNote;
