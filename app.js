@@ -171,22 +171,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxVal = Math.max(...dataArray);
         let timeOffset = Tone.now();
 
+        // Creamos los sintetizadores UNA VEZ fuera del loop para mejor rendimiento
+        const coin = new Tone.MetalSynth({
+            envelope: { attack: 0.01, decay: 0.1, release: 0.1 },
+            harmonicity: 5.1,
+            resonance: 4000
+        }).toDestination();
+
+        const alert = new Tone.MembraneSynth().toDestination();
+
         dataArray.forEach((val, index) => {
             // Mapeo de Tono (Pitch)
             const freq = mapPriceToFrequency(val, minVal, maxVal, 220, 880);
             
-            // Sonido de Moneda (Metálico)
-            const coin = new Tone.MetalSynth({
-                envelope: { attack: 0.01, decay: 0.1, release: 0.1 },
-                harmonicity: 5.1,
-                resonance: 4000
-            }).toDestination();
-
             // Alerta emocional si hay alza brusca (>5%)
             let esAlerta = false;
             if (index > 0 && (val - dataArray[index-1])/dataArray[index-1] > 0.05) {
                 esAlerta = true;
-                const alert = new Tone.MembraneSynth().toDestination();
                 alert.triggerAttackRelease("C2", "4n", timeOffset);
             }
 
