@@ -28,7 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         mode: 'lines+markers',
         name: 'Pan',
         line: { color: '#fbbf24', width: 3, shape: 'spline' },
-        marker: { size: 8 }
+        marker: { size: 8 },
+        hovertemplate: '<b>%{x}</b><br>' +
+                       'Precio: $%{y}<br>' +
+                       'Con $5.000 compras: <b>%{customdata[0]:.2f} kg</b><br>' +
+                       '<span style="color:#f43f5e">Has perdido: %{customdata[1]:.2f} kg</span> desde el inicio<extra></extra>',
+        customdata: panPrecios.map(p => [5000 / p, (5000 / panPrecios[0]) - (5000 / p)])
     };
 
     const traceAceite = {
@@ -37,7 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
         mode: 'lines+markers',
         name: 'Aceite Vegetal',
         line: { color: '#f43f5e', width: 3, shape: 'spline' },
-        marker: { size: 8 }
+        marker: { 
+            size: 8,
+            color: aceitePrecios.map((p, i) => {
+                if (i === 0) return '#f43f5e';
+                const salto = (p - aceitePrecios[i-1]) / aceitePrecios[i-1];
+                return salto > 0.05 ? '#ff0000' : '#f43f5e'; // Rojo intenso para saltos bruscos
+            }),
+            symbol: aceitePrecios.map((p, i) => {
+                if (i === 0) return 'circle';
+                const salto = (p - aceitePrecios[i-1]) / aceitePrecios[i-1];
+                return salto > 0.05 ? 'diamond' : 'circle'; // Diamante para alertas
+            })
+        },
+        hovertemplate: '<b>%{x}</b><br>' +
+                       'Precio: $%{y}<br>' +
+                       'Con $5.000 compras: <b>%{customdata[0]:.2f} litros</b><br>' +
+                       '<span style="color:#ff0000">Has perdido: %{customdata[1]:.2f} litros</span> desde el inicio<extra></extra>',
+        customdata: aceitePrecios.map(p => [5000 / p, (5000 / aceitePrecios[0]) - (5000 / p)])
     };
 
     const traceArroz = {
@@ -46,7 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         mode: 'lines+markers',
         name: 'Arroz',
         line: { color: '#38bdf8', width: 3, shape: 'spline' },
-        marker: { size: 8 }
+        marker: { size: 8 },
+        hovertemplate: '<b>%{x}</b><br>' +
+                       'Precio: $%{y}<br>' +
+                       'Con $5.000 compras: <b>%{customdata[0]:.2f} kg</b><br>' +
+                       '<span style="color:#f43f5e">Has perdido: %{customdata[1]:.2f} kg</span> desde el inicio<extra></extra>',
+        customdata: arrozPrecios.map(p => [5000 / p, (5000 / arrozPrecios[0]) - (5000 / p)])
     };
 
     // 2. Creamos el trazo para el Promedio Nacional (Referencia)
@@ -66,17 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const layout = {
         title: {
             text: '<b>Evolución de Precios: El impacto real en la Canasta</b>',
-            font: { color: '#f8fafc', size: 24 }
+            font: { color: '#f8fafc', size: 22 },
+            y: 0.95 // Bajamos un poco el título dentro del margen superior
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
         font: { family: 'Outfit', color: '#f8fafc' },
         showlegend: true,
-        legend: { font: { color: '#94a3b8' }, orientation: 'h', y: 1.15 },
+        legend: { 
+            font: { color: '#94a3b8', size: 10 }, 
+            orientation: 'h', 
+            y: -0.2, // Movemos la leyenda al fondo para evitar colisión con el título
+            x: 0.5,
+            xanchor: 'center'
+        },
         xaxis: {
             title: 'Meses (2024 - 2025)',
             gridcolor: 'rgba(255,255,255,0.1)',
-            tickfont: { color: '#94a3b8' },
+            tickfont: { color: '#94a3b8', size: 10 },
+            tickangle: -45, // Rotamos los meses para que no se encimen
             showgrid: false,
             zeroline: false
         },
@@ -96,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tickfont: { color: 'rgba(148, 163, 184, 0.6)' },
             range: [100, 110] // Ajustamos el rango del índice para que la pendiente sea comparable
         },
-        margin: { l: 60, r: 20, t: 80, b: 50 },
+        margin: { l: 60, r: 60, t: 100, b: 100 },
         hovermode: 'closest'
     };
 
@@ -106,89 +141,84 @@ document.addEventListener('DOMContentLoaded', () => {
     Plotly.newPlot('plotly-chart', data, layout, config);
 
     // ==========================================
-    // TONE.JS SONIFICACIÓN
+    // TONE.JS SONIFICACIÓN (Auditory Icons)
     // ==========================================
     
     let isPlaying = false;
     const playBtn = document.getElementById('play-sonification');
+    const playIpcBtn = document.getElementById('play-ipc-sonification');
     const statusText = document.getElementById('status-text');
 
-    // Función para mapear un valor numérico a una frecuencia (Hz)
-    // Aceite varía aprox entre 4200 y 6200. Mapearemos esto entre 200Hz y 800Hz.
+    // Sintetizador Metálico para el "Clink" de moneda
+    const coinSynth = new Tone.MetalSynth({
+        frequency: 200,
+        envelope: { attack: 0.001, decay: 0.1, release: 0.1 },
+        harmonicity: 5.1,
+        modulationIndex: 32,
+        resonance: 4000,
+        octaves: 1.5
+    }).toDestination();
+
+    // Sintetizador de Alerta (Cha-ching!)
+    const alertSynth = new Tone.MembraneSynth({
+        pitchDecay: 0.05,
+        octaves: 10,
+        oscillator: { type: "sine" }
+    }).toDestination();
+
     const mapPriceToFrequency = (price, minPrice, maxPrice, minFreq, maxFreq) => {
         return ((price - minPrice) / (maxPrice - minPrice)) * (maxFreq - minFreq) + minFreq;
     };
 
-    playBtn.addEventListener('click', async () => {
+    const playSequence = async (dataArray, label, isIpc = false) => {
         if (isPlaying) return;
-
-        // Iniciar Audio Context al interactuar (requerimiento de navegadores)
         await Tone.start();
         isPlaying = true;
         playBtn.disabled = true;
-        statusText.innerText = "Reproduciendo evolución del precio del Aceite...";
+        playIpcBtn.disabled = true;
+        statusText.innerText = `Escuchando evolución: ${label}...`;
 
-        // Crear Sintetizador con un sonido suave
-        const synth = new Tone.PolySynth(Tone.Synth, {
-            oscillator: { type: "triangle" },
-            envelope: { attack: 0.1, decay: 0.2, sustain: 0.2, release: 1 }
-        }).toDestination();
-
-        // Aplicar un pequeño delay o reverb para que suene más inmersivo
-        const reverb = new Tone.Reverb(2).toDestination();
-        synth.connect(reverb);
-
-        // Encontrar mínimo y máximo del aceite para la escala
-        const minAceite = Math.min(...aceitePrecios);
-        const maxAceite = Math.max(...aceitePrecios);
-
-        // Secuencia de reproducción
+        const minVal = Math.min(...dataArray);
+        const maxVal = Math.max(...dataArray);
         let timeOffset = Tone.now();
-        const durationPerNote = 0.4; // Segundos por cada mes
+        const durationPerNote = 0.4;
 
-        aceitePrecios.forEach((precio, index) => {
-            const freq = mapPriceToFrequency(precio, minAceite, maxAceite, 220, 880);
+        dataArray.forEach((val, index) => {
+            const freq = mapPriceToFrequency(val, minVal, maxVal, 220, 1200);
             
-            // CALCULAR EL SALTO: ¿Cuánto subió respecto al mes anterior?
             let salto = 0;
             if (index > 0) {
-                salto = (precio - aceitePrecios[index - 1]) / aceitePrecios[index - 1];
+                salto = (val - dataArray[index - 1]) / dataArray[index - 1];
             }
+            const esAlerta = !isIpc && salto > 0.05;
 
-            // SI EL SALTO ES GRANDE (ej. > 5%), activamos efectos de "urgencia"
-            const esAlerta = salto > 0.05;
+            // Sonido de moneda (con pitch mapeado)
+            coinSynth.triggerAttackRelease(freq, "32n", timeOffset);
 
-            // Programar la nota
-            // Usamos un pequeño truco: conectamos a un vibrato solo si hay alerta
             if (esAlerta) {
-                const vibrato = new Tone.Vibrato(5, 0.3).toDestination();
-                synth.connect(vibrato);
-                synth.triggerAttackRelease(freq, "8n", timeOffset);
-                // Desconectamos después de la nota para no acumular efectos
-                Tone.Transport.scheduleOnce(() => {
-                    synth.disconnect(vibrato);
-                }, timeOffset + 0.3);
-            } else {
-                synth.triggerAttackRelease(freq, "8n", timeOffset);
+                // Sonido de alerta (Cha-ching!)
+                alertSynth.triggerAttackRelease("C6", "16n", timeOffset + 0.05);
             }
             
-            // Efecto visual sincronizado: Cambiar color o texto
             Tone.Draw.schedule(() => {
                 statusText.style.color = esAlerta ? "#f43f5e" : "#f8fafc";
                 statusText.style.fontWeight = esAlerta ? "bold" : "normal";
                 statusText.innerText = esAlerta 
-                    ? `⚠️ ¡ALERTA! Alza brusca: ${meses[index]} | $${precio}`
-                    : `Mes: ${meses[index]} | Precio Aceite: $${precio}`;
+                    ? `⚠️ ¡ALERTA! Alza brusca: ${meses[index]} | $${val}`
+                    : `Mes: ${meses[index]} | ${label}: ${isIpc ? val.toFixed(1) : '$'+val}`;
             }, timeOffset);
 
             timeOffset += durationPerNote;
         });
 
-        // Al finalizar
         setTimeout(() => {
             isPlaying = false;
             playBtn.disabled = false;
-            statusText.innerText = "Sonificación completada.";
-        }, (aceitePrecios.length * durationPerNote * 1000) + 1000);
-    });
+            playIpcBtn.disabled = false;
+            statusText.innerText = "Sonificación completada. Compara los sonidos para notar la brecha.";
+        }, (dataArray.length * durationPerNote * 1000) + 1000);
+    };
+
+    playBtn.addEventListener('click', () => playSequence(aceitePrecios, "Aceite Vegetal"));
+    playIpcBtn.addEventListener('click', () => playSequence(promedioNacional.slice(0, meses.length), "IPC General", true));
 });
