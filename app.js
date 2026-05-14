@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         plot_bgcolor: 'rgba(0,0,0,0)',
         font: { family: 'Outfit', color: '#f8fafc' },
         xaxis: {
-            title: 'Meses (2024)',
+            title: 'Meses (2024 - 2025)',
             showgrid: false,
             zeroline: false
         },

@@ -70,5 +70,71 @@ let datosInflacion = [
         "pan": 16494,
         "aceite": 6231,
         "arroz": 2157
+    },
+    {
+        "mes": "Ene 2025",
+        "pan": 16403,
+        "aceite": 5672,
+        "arroz": 2114
+    },
+    {
+        "mes": "Feb 2025",
+        "pan": 17477,
+        "aceite": 5716,
+        "arroz": 2123
+    },
+    {
+        "mes": "Mar 2025",
+        "pan": 17836,
+        "aceite": 5660,
+        "arroz": 2121
+    },
+    {
+        "mes": "Abr 2025",
+        "pan": 17139,
+        "aceite": 5804,
+        "arroz": 2117
+    },
+    {
+        "mes": "May 2025",
+        "pan": 16507,
+        "aceite": 5838,
+        "arroz": 2153
+    },
+    {
+        "mes": "Jun 2025",
+        "pan": 14339,
+        "aceite": 5592,
+        "arroz": 2122
+    },
+    {
+        "mes": "Jul 2025",
+        "pan": 14909,
+        "aceite": 5840,
+        "arroz": 2114
+    },
+    {
+        "mes": "Ago 2025",
+        "pan": 15232,
+        "aceite": 5605,
+        "arroz": 2029
+    },
+    {
+        "mes": "Sep 2025",
+        "pan": 15416,
+        "aceite": 5804,
+        "arroz": 2011
+    },
+    {
+        "mes": "Oct 2025",
+        "pan": 14975,
+        "aceite": 5714,
+        "arroz": 2018
+    },
+    {
+        "mes": "Nov 2025",
+        "pan": 15637,
+        "aceite": 5583,
+        "arroz": 1967
     }
 ];

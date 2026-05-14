@@ -6,13 +6,19 @@ file_path = 'Base anonimizada IPC 2023.csv'
 meses_cols = [
     'pm_Enero2024', 'pm_Febrero2024', 'pm_Marzo2024', 'pm_Abril2024',
     'pm_Mayo2024', 'pm_Junio2024', 'Pm_Julio2024', 'Pm_Agosto2024',
-    'Pm_Septiembre2024', 'Pm_Octubre2024', 'Pm_Noviembre2024', 'Pm_Diciembre2024'
+    'Pm_Septiembre2024', 'Pm_Octubre2024', 'Pm_Noviembre2024', 'Pm_Diciembre2024',
+    'pm_Enero2025', 'pm_Febrero2025', 'pm_Marzo2025', 'pm_Abril2025',
+    'pm_Mayo2025', 'pm_junio2025', 'pm_julio2025', 'pm_Agosto2025',
+    'pm_Septiembre2025', 'pm_Octubre2025', 'pm_Noviembre2025'
 ]
 
 nombres_meses = [
     "Ene 2024", "Feb 2024", "Mar 2024", "Abr 2024", 
     "May 2024", "Jun 2024", "Jul 2024", "Ago 2024", 
-    "Sep 2024", "Oct 2024", "Nov 2024", "Dic 2024"
+    "Sep 2024", "Oct 2024", "Nov 2024", "Dic 2024",
+    "Ene 2025", "Feb 2025", "Mar 2025", "Abr 2025",
+    "May 2025", "Jun 2025", "Jul 2025", "Ago 2025",
+    "Sep 2025", "Oct 2025", "Nov 2025"
 ]
 
 datos_por_mes = {mes: {'pan': [], 'aceite': [], 'arroz': []} for mes in nombres_meses}
