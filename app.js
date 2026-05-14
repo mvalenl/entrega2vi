@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Referencia a los datos generados por el script de Python (datos_extraidos.js)
     // Asumimos que la variable global `datosInflacion` ya está definida.
 
+
+
+
     if (typeof datosInflacion === 'undefined') {
         document.getElementById('status-text').innerText = "Error: No se encontraron los datos del IPC.";
         return;
@@ -30,12 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const qty0 = (initialBudget / p0).toFixed(1);
             const qtyt = (initialBudget / pt).toFixed(1);
             const loss = (((qtyt - qty0) / qty0) * 100).toFixed(0);
-            
+
             return `<b>${meses[i]}</b><br>` +
-                   `Precio: $${pt}<br>` +
-                   `Con $5.000 comprabas: ${qty0}L/kg<br>` +
-                   `Hoy compras: ${qtyt}L/kg<br>` +
-                   `<span style="color:#ff6b6b; font-weight:bold;">Has perdido el ${Math.abs(loss)}% de tu comida</span><extra></extra>`;
+                `Precio: $${pt}<br>` +
+                `Con $5.000 comprabas: ${qty0}L/kg<br>` +
+                `Hoy compras: ${qtyt}L/kg<br>` +
+                `<span style="color:red">Has perdido el ${Math.abs(loss)}% de tu comida</span><extra></extra>`;
         });
     };
 
@@ -56,16 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
         mode: 'lines+markers',
         name: 'Aceite Vegetal',
         line: { color: '#f43f5e', width: 3, shape: 'spline' },
-        marker: { 
+        marker: {
             size: 8,
             color: aceitePrecios.map((p, i) => {
                 if (i === 0) return '#f43f5e';
-                const salto = (p - aceitePrecios[i-1]) / aceitePrecios[i-1];
+                const salto = (p - aceitePrecios[i - 1]) / aceitePrecios[i - 1];
                 return salto > 0.05 ? '#ff0000' : '#f43f5e';
             }),
             symbol: aceitePrecios.map((p, i) => {
                 if (i === 0) return 'circle';
-                const salto = (p - aceitePrecios[i-1]) / aceitePrecios[i-1];
+                const salto = (p - aceitePrecios[i - 1]) / aceitePrecios[i - 1];
                 return salto > 0.05 ? 'diamond' : 'circle';
             })
         },
@@ -90,11 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
         name: 'IPC General (Referencia)',
         yaxis: 'y2',
         line: { color: 'rgba(148, 163, 184, 0.4)', width: 3, dash: 'dot' },
-        marker: { 
+        marker: {
             size: 4,
             color: promedioNacional.map((p, i) => {
                 if (i === 0) return 'rgba(148, 163, 184, 0.4)';
-                const salto = (p - promedioNacional[i-1]) / promedioNacional[i-1];
+                const salto = (p - promedioNacional[i - 1]) / promedioNacional[i - 1];
                 return salto > 0.01 ? '#6366f1' : 'rgba(148, 163, 184, 0.4)'; // Azul pizarra para saltos > 1%
             })
         },
@@ -114,9 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
         plot_bgcolor: 'rgba(0,0,0,0)',
         font: { family: 'Outfit', color: '#f8fafc' },
         showlegend: true,
-        legend: { 
-            font: { color: '#94a3b8', size: 10 }, 
-            orientation: 'h', 
+        legend: {
+            font: { color: '#94a3b8', size: 10 },
+            orientation: 'h',
             y: -0.2, // Movemos la leyenda al fondo para evitar colisión con el título
             x: 0.5,
             xanchor: 'center'
@@ -146,12 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             range: [100, 110] // Ajustamos el rango del índice para que la pendiente sea comparable
         },
         margin: { l: 60, r: 60, t: 100, b: 100 },
-        hovermode: 'closest',
-        hoverlabel: {
-            bgcolor: '#0f172a', // Fondo azul muy oscuro para que todo resalte
-            font: { color: '#f8fafc', family: 'Outfit', size: 13 },
-            bordercolor: 'rgba(255,255,255,0.2)'
-        }
+        hovermode: 'closest'
     };
 
     const config = { responsive: true, displayModeBar: false };
@@ -162,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // TONE.JS SONIFICACIÓN (Auditory Icons)
     // ==========================================
-    
+
     let isPlaying = false;
     const statusText = document.getElementById('status-text');
 
@@ -176,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isPlaying) return;
         await Tone.start();
         isPlaying = true;
-        
+
         // Deshabilitar todos los botones durante la reproducción
         document.querySelectorAll('.play-btn').forEach(b => b.disabled = true);
 
@@ -188,22 +186,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const coin = new Tone.MetalSynth({
             envelope: { attack: 0.01, decay: 0.1, release: 0.1 },
             harmonicity: 5.1,
+            resonance: 4000
+        }).toDestination();
+
         const alert = new Tone.MembraneSynth().toDestination();
 
         dataArray.forEach((val, index) => {
-            // Mapeo de Tono (Pitch) - Único canal para representar valor
+            // Mapeo de Tono (Pitch)
             const freq = mapPriceToFrequency(val, minVal, maxVal, 220, 880);
-            
-            // Sonido de Moneda (Metálico) - Volumen constante para rigor técnico
-            const coin = new Tone.MetalSynth({
-                envelope: { attack: 0.01, decay: 0.1, release: 0.1 },
-                harmonicity: 5.1,
-                resonance: 4000
-            }).toDestination();
 
             // Alerta emocional si el alza supera el umbral (threshold)
             let esAlerta = false;
-            if (index > 0 && (val - dataArray[index-1])/dataArray[index-1] > threshold) {
+            if (index > 0 && (val - dataArray[index - 1]) / dataArray[index - 1] > threshold) {
                 esAlerta = true;
                 alert.triggerAttackRelease("C2", "4n", timeOffset);
             }
@@ -219,8 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
             timeOffset += 0.4;
         });
 
-        setTimeout(() => { 
-            isPlaying = false; 
+        setTimeout(() => {
+            isPlaying = false;
             document.querySelectorAll('.play-btn').forEach(b => b.disabled = false);
             statusText.innerText = "Sonificación completada. Compara los productos para notar la brecha.";
         }, dataArray.length * 400);
