@@ -29,17 +29,17 @@
             <div id="plotly-chart" style="width: 100%; height: 500px;"></div>
             
             <!-- Controles Interactivos -->
-            <div class="controls">
-                <button id="play-sonification" class="play-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                    Escuchar Aceite (Volatilidad)
+            <div class="controls" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <button id="play-aceite" class="play-btn" style="background: var(--accent-aceite);">
+                    Escuchar Aceite (Crisis)
                 </button>
-                <button id="play-ipc-sonification" class="play-btn" style="background: #475569;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
+                <button id="play-pan" class="play-btn" style="background: var(--accent-pan); color: #000;">
+                    Escuchar Pan (Estabilidad)
+                </button>
+                <button id="play-arroz" class="play-btn" style="background: var(--accent-arroz);">
+                    Escuchar Arroz (Moderado)
+                </button>
+                <button id="play-ipc" class="play-btn" style="background: #475569;">
                     Escuchar IPC (Referencia)
                 </button>
             </div>

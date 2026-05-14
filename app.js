@@ -21,6 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
         103.8, 104.1, 104.4, 104.6, 104.8, 105.0, 105.2, 105.4, 105.6, 105.8, 106.0
     ];
 
+    // 1. EL CALCULADOR DE PODER ADQUISITIVO (Lo que no se ve a simple vista)
+    const initialBudget = 5000; // Presupuesto base de $5.000
+
+    const updateHoverTemplate = (dataArray) => {
+        const p0 = dataArray[0]; // Precio en el primer mes
+        return dataArray.map((pt, i) => {
+            const qty0 = (initialBudget / p0).toFixed(1);
+            const qtyt = (initialBudget / pt).toFixed(1);
+            const loss = (((qtyt - qty0) / qty0) * 100).toFixed(0);
+            
+            return `<b>${meses[i]}</b><br>` +
+                   `Precio: $${pt}<br>` +
+                   `Con $5.000 comprabas: ${qty0}L/kg<br>` +
+                   `Hoy compras: ${qtyt}L/kg<br>` +
+                   `<span style="color:red">Has perdido el ${Math.abs(loss)}% de tu comida</span><extra></extra>`;
+        });
+    };
+
     // Trazos (Traces) para el gráfico interactivo
     const tracePan = {
         x: meses,
@@ -29,11 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         name: 'Pan',
         line: { color: '#fbbf24', width: 3, shape: 'spline' },
         marker: { size: 8 },
-        hovertemplate: '<b>%{x}</b><br>' +
-                       'Precio: $%{y}<br>' +
-                       'Con $5.000 compras: <b>%{customdata[0]:.2f} kg</b><br>' +
-                       '<span style="color:#f43f5e">Has perdido: %{customdata[1]:.2f} kg</span> desde el inicio<extra></extra>',
-        customdata: panPrecios.map(p => [5000 / p, (5000 / panPrecios[0]) - (5000 / p)])
+        hovertemplate: updateHoverTemplate(panPrecios)
     };
 
     const traceAceite = {
@@ -47,19 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
             color: aceitePrecios.map((p, i) => {
                 if (i === 0) return '#f43f5e';
                 const salto = (p - aceitePrecios[i-1]) / aceitePrecios[i-1];
-                return salto > 0.05 ? '#ff0000' : '#f43f5e'; // Rojo intenso para saltos bruscos
+                return salto > 0.05 ? '#ff0000' : '#f43f5e';
             }),
             symbol: aceitePrecios.map((p, i) => {
                 if (i === 0) return 'circle';
                 const salto = (p - aceitePrecios[i-1]) / aceitePrecios[i-1];
-                return salto > 0.05 ? 'diamond' : 'circle'; // Diamante para alertas
+                return salto > 0.05 ? 'diamond' : 'circle';
             })
         },
-        hovertemplate: '<b>%{x}</b><br>' +
-                       'Precio: $%{y}<br>' +
-                       'Con $5.000 compras: <b>%{customdata[0]:.2f} litros</b><br>' +
-                       '<span style="color:#ff0000">Has perdido: %{customdata[1]:.2f} litros</span> desde el inicio<extra></extra>',
-        customdata: aceitePrecios.map(p => [5000 / p, (5000 / aceitePrecios[0]) - (5000 / p)])
+        hovertemplate: updateHoverTemplate(aceitePrecios)
     };
 
     const traceArroz = {
@@ -69,11 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         name: 'Arroz',
         line: { color: '#38bdf8', width: 3, shape: 'spline' },
         marker: { size: 8 },
-        hovertemplate: '<b>%{x}</b><br>' +
-                       'Precio: $%{y}<br>' +
-                       'Con $5.000 compras: <b>%{customdata[0]:.2f} kg</b><br>' +
-                       '<span style="color:#f43f5e">Has perdido: %{customdata[1]:.2f} kg</span> desde el inicio<extra></extra>',
-        customdata: arrozPrecios.map(p => [5000 / p, (5000 / arrozPrecios[0]) - (5000 / p)])
+        hovertemplate: updateHoverTemplate(arrozPrecios)
     };
 
     // 2. Creamos el trazo para el Promedio Nacional (Referencia)
@@ -145,80 +151,66 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     
     let isPlaying = false;
-    const playBtn = document.getElementById('play-sonification');
-    const playIpcBtn = document.getElementById('play-ipc-sonification');
     const statusText = document.getElementById('status-text');
 
-    // Sintetizador Metálico para el "Clink" de moneda
-    const coinSynth = new Tone.MetalSynth({
-        frequency: 200,
-        envelope: { attack: 0.001, decay: 0.1, release: 0.1 },
-        harmonicity: 5.1,
-        modulationIndex: 32,
-        resonance: 4000,
-        octaves: 1.5
-    }).toDestination();
-
-    // Sintetizador de Alerta (Cha-ching!)
-    const alertSynth = new Tone.MembraneSynth({
-        pitchDecay: 0.05,
-        octaves: 10,
-        oscillator: { type: "sine" }
-    }).toDestination();
-
+    // Función para mapear un valor numérico a una frecuencia (Hz)
     const mapPriceToFrequency = (price, minPrice, maxPrice, minFreq, maxFreq) => {
         return ((price - minPrice) / (maxPrice - minPrice)) * (maxFreq - minFreq) + minFreq;
     };
 
-    const playSequence = async (dataArray, label, isIpc = false) => {
+    // 2. FUNCIÓN DE SONIFICACIÓN REUTILIZABLE
+    const playProduct = async (dataArray, label, color) => {
         if (isPlaying) return;
         await Tone.start();
         isPlaying = true;
-        playBtn.disabled = true;
-        playIpcBtn.disabled = true;
-        statusText.innerText = `Escuchando evolución: ${label}...`;
+        
+        // Deshabilitar todos los botones durante la reproducción
+        document.querySelectorAll('.play-btn').forEach(b => b.disabled = true);
 
         const minVal = Math.min(...dataArray);
         const maxVal = Math.max(...dataArray);
         let timeOffset = Tone.now();
-        const durationPerNote = 0.4;
 
         dataArray.forEach((val, index) => {
-            const freq = mapPriceToFrequency(val, minVal, maxVal, 220, 1200);
+            // Mapeo de Tono (Pitch)
+            const freq = mapPriceToFrequency(val, minVal, maxVal, 220, 880);
             
-            let salto = 0;
-            if (index > 0) {
-                salto = (val - dataArray[index - 1]) / dataArray[index - 1];
-            }
-            const esAlerta = !isIpc && salto > 0.05;
+            // Sonido de Moneda (Metálico)
+            const coin = new Tone.MetalSynth({
+                envelope: { attack: 0.01, decay: 0.1, release: 0.1 },
+                harmonicity: 5.1,
+                resonance: 4000
+            }).toDestination();
 
-            // Sonido de moneda (con pitch mapeado)
-            coinSynth.triggerAttackRelease(freq, "32n", timeOffset);
-
-            if (esAlerta) {
-                // Sonido de alerta (Cha-ching!)
-                alertSynth.triggerAttackRelease("C6", "16n", timeOffset + 0.05);
+            // Alerta emocional si hay alza brusca (>5%)
+            let esAlerta = false;
+            if (index > 0 && (val - dataArray[index-1])/dataArray[index-1] > 0.05) {
+                esAlerta = true;
+                const alert = new Tone.MembraneSynth().toDestination();
+                alert.triggerAttackRelease("C2", "4n", timeOffset);
             }
-            
+
+            coin.triggerAttackRelease(freq, "32n", timeOffset);
+
             Tone.Draw.schedule(() => {
-                statusText.style.color = esAlerta ? "#f43f5e" : "#f8fafc";
+                statusText.style.color = esAlerta ? color : "#f8fafc";
                 statusText.style.fontWeight = esAlerta ? "bold" : "normal";
-                statusText.innerText = esAlerta 
-                    ? `⚠️ ¡ALERTA! Alza brusca: ${meses[index]} | $${val}`
-                    : `Mes: ${meses[index]} | ${label}: ${isIpc ? val.toFixed(1) : '$'+val}`;
+                statusText.innerText = `Escuchando ${label}: ${meses[index]} | $${val.toFixed(0)}`;
             }, timeOffset);
 
-            timeOffset += durationPerNote;
+            timeOffset += 0.4;
         });
 
-        setTimeout(() => {
-            isPlaying = false;
-            playBtn.disabled = false;
-            playIpcBtn.disabled = false;
-            statusText.innerText = "Sonificación completada. Compara los sonidos para notar la brecha.";
-        }, (dataArray.length * durationPerNote * 1000) + 1000);
+        setTimeout(() => { 
+            isPlaying = false; 
+            document.querySelectorAll('.play-btn').forEach(b => b.disabled = false);
+            statusText.innerText = "Sonificación completada. Compara los productos para notar la brecha.";
+        }, dataArray.length * 400);
     };
 
-    playBtn.addEventListener('click', () => playSequence(aceitePrecios, "Aceite Vegetal"));
-    playIpcBtn.addEventListener('click', () => playSequence(promedioNacional.slice(0, meses.length), "IPC General", true));
+    // Listeners de los botones
+    document.getElementById('play-aceite').onclick = () => playProduct(aceitePrecios, "Aceite", "#f43f5e");
+    document.getElementById('play-pan').onclick = () => playProduct(panPrecios, "Pan", "#fbbf24");
+    document.getElementById('play-arroz').onclick = () => playProduct(arrozPrecios, "Arroz", "#38bdf8");
+    document.getElementById('play-ipc').onclick = () => playProduct(promedioNacional.slice(0, meses.length), "IPC", "#94a3b8");
 });
