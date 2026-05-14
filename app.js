@@ -146,7 +146,12 @@ document.addEventListener('DOMContentLoaded', () => {
             range: [100, 110] // Ajustamos el rango del índice para que la pendiente sea comparable
         },
         margin: { l: 60, r: 60, t: 100, b: 100 },
-        hovermode: 'closest'
+        hovermode: 'closest',
+        hoverlabel: {
+            bgcolor: '#0f172a', // Fondo azul muy oscuro para que todo resalte
+            font: { color: '#f8fafc', family: 'Outfit', size: 13 },
+            bordercolor: 'rgba(255,255,255,0.2)'
+        }
     };
 
     const config = { responsive: true, displayModeBar: false };
